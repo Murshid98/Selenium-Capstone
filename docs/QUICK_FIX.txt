@@ -1,0 +1,147 @@
+================================================================================
+                    MAVEN BUILD FIX - QUICK REFERENCE
+================================================================================
+
+ERROR YOU GOT:
+  [ERROR] Could not find artifact org.testng:testng:jar:7.8.1
+
+ROOT CAUSE:
+  TestNG version 7.8.1 doesn't exist in Maven Central Repository
+
+WHAT I FIXED:
+  ✅ Changed TestNG from 7.8.1 → 7.8.0 (verified version)
+  ✅ Added Repository configuration to pom.xml
+  ✅ Created maven-settings.xml for reliable downloads
+  ✅ Created fix scripts for Windows
+
+================================================================================
+                           DO THIS NOW
+================================================================================
+
+OPTION 1: USE AUTOMATED FIX SCRIPT (EASIEST)
+  ────────────────────────────────────────────
+  1. Open Command Prompt or PowerShell
+  2. Navigate: cd "Selenium Capstone"
+  3. Run ONE of these:
+     - Command Prompt:  fix-maven.bat
+     - PowerShell:      .\fix-maven.ps1
+
+OPTION 2: MANUAL FIX (4 STEPS)
+  ────────────────────────────────────────────
+  1. Delete Maven cache:
+     Command Prompt:  rmdir /s /q "%USERPROFILE%\.m2\repository"
+     PowerShell:      Remove-Item -Recurse -Force "$env:USERPROFILE\.m2\repository"
+
+  2. Navigate to project:
+     cd "C:\Users\abdulla.murshidkv\Desktop\myprojects\Selenium Capstone"
+
+  3. Clean Maven:
+     mvn clean
+
+  4. Install with updates:
+     mvn install -U
+
+OPTION 3: USE SETTINGS FILE
+  ────────────────────────────────────────────
+  1. Navigate: cd "Selenium Capstone"
+  2. Run: mvn clean install --settings maven-settings.xml
+
+================================================================================
+                        EXPECTED SUCCESS
+================================================================================
+
+You should see:
+  [INFO] BUILD SUCCESS
+  [INFO] Total time: XX.XXXs
+
+Then you can:
+  mvn test                    (run all tests)
+  mvn test -Dtest=LoginTests  (run specific tests)
+  mvn clean test              (clean and run tests)
+
+================================================================================
+                     FILES THAT WERE FIXED
+================================================================================
+
+✅ pom.xml
+   - TestNG: 7.8.1 → 7.8.0
+   - Added repository configuration
+
+✅ maven-settings.xml (NEW)
+   - Maven mirror configuration
+
+✅ fix-maven.bat (NEW)
+   - Windows Command Prompt script
+
+✅ fix-maven.ps1 (NEW)
+   - Windows PowerShell script
+
+✅ MAVEN_FIX_GUIDE.md (NEW)
+   - Detailed troubleshooting guide
+
+✅ BUILD_FIX_SUMMARY.md (NEW)
+   - Complete summary with all options
+
+================================================================================
+                      TROUBLESHOOTING
+================================================================================
+
+If build still fails:
+
+1. Check Java:
+   java -version
+   (Should show: openjdk version "17.x.x")
+
+2. Check Maven:
+   mvn --version
+   (Should show: Maven 3.6+)
+
+3. Check Internet:
+   ping repo.maven.apache.org
+
+4. Get detailed error:
+   mvn clean install -U -X > build.log
+   (Check build.log file for details)
+
+5. Try with settings file:
+   mvn clean install --settings maven-settings.xml
+
+================================================================================
+                        ALL DEPENDENCIES
+================================================================================
+
+✅ Selenium:         4.15.0 (Latest 4.x)
+✅ TestNG:          7.8.0  (Fixed from 7.8.1)
+✅ Extent Reports:  5.0.9
+✅ Log4j2:          2.21.0
+✅ WebDriver Mgr:   5.6.2
+✅ Java:            17 (LTS)
+
+================================================================================
+                         NEXT STEPS
+================================================================================
+
+After build succeeds:
+
+1. Run tests:
+   mvn test
+
+2. View report:
+   start test-results\reports\ExtentReport_*.html
+
+3. Run specific test class:
+   mvn test -Dtest=LoginTests
+
+4. Run specific test method:
+   mvn test -Dtest=LoginTests#testValidLogin
+
+================================================================================
+
+Questions? Check:
+  - BUILD_FIX_SUMMARY.md
+  - MAVEN_FIX_GUIDE.md
+  - README.md
+
+Your build should work now! ✅
+
+================================================================================

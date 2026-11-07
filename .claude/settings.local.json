@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn clean *)",
+      "Bash(mvn install *)",
+      "Bash(export *)",
+      "Bash(mvn dependency:tree)",
+      "Bash(mvn test *)"
+    ]
+  }
+}

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<!--
+    TestNG Suite Configuration for SauceDemo Automation Framework
+
+    This file defines how tests are organized and executed.
+    Features:
+    - Multiple test groups (Positive, Negative, End-to-End)
+    - Test execution order and parallel settings
+    - Test class registration
+    - Report generation
+-->
+<suite name="SauceDemo Test Suite" verbose="2" thread-count="1" parallel="false">
+
+    <!-- Suite-level listeners for reports and logging -->
+    <listeners>
+        <!-- You can add custom listeners here for additional reporting -->
+    </listeners>
+
+    <!-- ===== TEST GROUP 1: POSITIVE TESTS (Happy Path) ===== -->
+    <!-- These tests verify that the application works as expected with valid inputs -->
+    <test name="Positive Tests" enabled="true">
+        <groups>
+            <run>
+                <include name="Positive" />
+            </run>
+        </groups>
+        <classes>
+            <!-- Login Tests - Positive Scenarios -->
+            <class name="com.saucedemo.tests.LoginTests">
+                <methods>
+                    <include name="testValidLogin" />
+                </methods>
+            </class>
+
+            <!-- Product Tests - Positive Scenarios -->
+            <class name="com.saucedemo.tests.ProductTests">
+                <methods>
+                    <include name="testProductCount" />
+                    <include name="testSortByNameAtoZ" />
+                    <include name="testSortByNameZtoA" />
+                    <include name="testSortByPriceLowToHigh" />
+                    <include name="testSortByPriceHighToLow" />
+                    <include name="testNavigateToProductDetail" />
+                    <include name="testProductDetailDataConsistency" />
+                    <include name="testAddToCartFromDetailPage" />
+                    <include name="testBackButtonFromDetailPage" />
+                </methods>
+            </class>
+
+            <!-- Cart Tests - Positive Scenarios -->
+            <class name="com.saucedemo.tests.CartTests">
+                <methods>
+                    <include name="testAddSingleItemToCart" />
+                    <include name="testAddMultipleItemsToCart" />
+                    <include name="testRemoveItemFromCart" />
+                    <include name="testVerifyCartItemDetails" />
+                    <include name="testContinueShoppingButton" />
+                    <include name="testEmptyCart" />
+                    <include name="testRemoveAllItemsFromCart" />
+                </methods>
+            </class>
+
+            <!-- Checkout Tests - Positive Scenarios -->
+            <class name="com.saucedemo.tests.CheckoutTests">
+                <methods>
+                    <include name="testCompleteCheckoutFlow" />
+                    <include name="testOrderSummaryVerification" />
+                    <include name="testPriceCalculationVerification" />
+                    <include name="testOrderConfirmationMessage" />
+                    <include name="testBackToProductsFromConfirmation" />
+                </methods>
+            </class>
+
+            <!-- Navigation Tests - Positive Scenarios -->
+            <class name="com.saucedemo.tests.NavigationTests">
+                <methods>
+                    <include name="testOpenSidebarMenu" />
+                    <include name="testCloseSidebarMenu" />
+                    <include name="testAllItemsLink" />
+                    <include name="testAboutLink" />
+                    <include name="testLogoutLink" />
+                    <include name="testResetAppState" />
+                    <include name="testSidebarMenuAccessibility" />
+                    <include name="testMultipleMenuOpenCloseCycles" />
+                </methods>
+            </class>
+
+            <!-- End-to-End Tests - Complete User Scenarios -->
+            <class name="com.saucedemo.tests.EndToEndTests">
+                <methods>
+                    <include name="testCompleteHappyPathScenario" />
+                    <include name="testHappyPathSingleItem" />
+                    <include name="testHappyPathWithProductDetails" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- ===== TEST GROUP 2: NEGATIVE TESTS (Error Handling) ===== -->
+    <!-- These tests verify that the application handles errors and invalid inputs correctly -->
+    <test name="Negative Tests" enabled="true">
+        <groups>
+            <run>
+                <include name="Negative" />
+            </run>
+        </groups>
+        <classes>
+            <!-- Login Tests - Negative Scenarios -->
+            <class name="com.saucedemo.tests.LoginTests">
+                <methods>
+                    <include name="testInvalidPassword" />
+                    <include name="testEmptyFieldsLogin" />
+                    <include name="testLockedOutUserLogin" />
+                    <include name="testOnlyUsernameFilledLogin" />
+                    <include name="testOnlyPasswordFilledLogin" />
+                </methods>
+            </class>
+
+            <!-- Checkout Tests - Negative Scenarios -->
+            <class name="com.saucedemo.tests.CheckoutTests">
+                <methods>
+                    <include name="testCheckoutEmptyFormSubmission" />
+                    <include name="testCheckoutMissingLastName" />
+                    <include name="testCheckoutMissingPostalCode" />
+                </methods>
+            </class>
+
+            <!-- Additional Negative Scenarios -->
+            <class name="com.saucedemo.tests.LoginTests">
+                <methods>
+                    <include name="testLoginLogoutBackButton" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

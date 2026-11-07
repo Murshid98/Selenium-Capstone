@@ -1,0 +1,69 @@
+# IDE and Editor Files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+.DS_Store
+.metadata/
+.project
+.classpath
+.c9/
+
+# Build and Compilation
+target/
+build/
+out/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+
+# Test Results and Reports
+test-results/
+test-output/
+reports/
+screenshots/
+logs/
+
+# Maven
+.m2/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Git
+.git/
+.gitattributes
+
+# Environment Variables
+.env
+.env.local
+
+# Driver Cache
+.wdm/
+drivers/
+
+# OS Specific
+Thumbs.db
+.DS_Store
+
+# Gradle
+.gradle/
+gradle/
+
+# Node (if used for any tooling)
+node_modules/
+npm-debug.log
+
+# Misc
+*.log
+*.tmp
+.history/
+*.orig
