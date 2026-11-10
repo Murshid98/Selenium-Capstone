@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SauceDemo Test Framework</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
@@ -561,6 +566,8 @@ html, body {
   .arch-arrow { display: none; }
 }
 </style>
+</head>
+<body>
 
 <div class="topbar">
   <span class="logo-badge">SauceDemo Framework</span>
@@ -653,13 +660,31 @@ html, body {
       <div class="arch-box">
         <span class="ab-icon">🌐</span>
         <div class="ab-name">WebDriver</div>
-        <div class="ab-sub">Chrome / Guest</div>
+        <div class="ab-sub">Chrome · Firefox · Edge</div>
       </div>
       <span class="arch-arrow">→</span>
       <div class="arch-box">
         <span class="ab-icon">🛒</span>
         <div class="ab-name">SauceDemo</div>
         <div class="ab-sub">Application</div>
+      </div>
+    </div>
+    <div class="arch-flow" style="margin-bottom:16px;gap:8px">
+      <div class="arch-box" style="min-width:90px;padding:10px 14px">
+        <span class="ab-icon" style="font-size:16px">⚙️</span>
+        <div class="ab-name" style="font-size:12px">ConfigReader</div>
+      </div>
+      <div class="arch-box" style="min-width:90px;padding:10px 14px">
+        <span class="ab-icon" style="font-size:16px">⏱</span>
+        <div class="ab-name" style="font-size:12px">WaitUtility</div>
+      </div>
+      <div class="arch-box" style="min-width:90px;padding:10px 14px">
+        <span class="ab-icon" style="font-size:16px">📸</span>
+        <div class="ab-name" style="font-size:12px">ScreenshotUtility</div>
+      </div>
+      <div class="arch-box" style="min-width:90px;padding:10px 14px">
+        <span class="ab-icon" style="font-size:16px">📊</span>
+        <div class="ab-name" style="font-size:12px">ExtentReportsUtility</div>
       </div>
     </div>
     <div class="arch-desc-row">
@@ -813,7 +838,7 @@ html, body {
         <div class="rt-label">Failed</div>
       </div>
       <div class="result-tile time">
-        <div class="rt-num">30:47</div>
+        <div class="rt-num">14:17</div>
         <div class="rt-label">Run Time</div>
       </div>
     </div>
@@ -936,3 +961,5 @@ function toggleTheme() {
   document.getElementById('themeBtn').textContent = next === 'dark' ? '☀ Light' : '☾ Dark';
 }
 </script>
+</body>
+</html>

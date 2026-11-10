@@ -27,11 +27,8 @@ public class NavigationTests extends BaseTest {
      * BeforeMethod - Common setup for navigation tests
      * Logs in user and navigates to products page before each test
      */
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void beforeNavigationTest() {
-        // Call parent beforeMethod for driver initialization
-        super.beforeMethod();
-
         // Login and navigate to products page
         LoginPage loginPage = new LoginPage(driver);
         productsPage = loginPage.login(

@@ -1,5 +1,6 @@
 package com.saucedemo.utilities;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -38,12 +39,30 @@ public class WaitUtility {
     }
 
     /**
+     * Wait for an element located by a By locator to be visible (handles elements not yet in DOM)
+     * @param locator - By locator
+     * @return The visible WebElement
+     */
+    public WebElement waitForElementToBeVisible(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    /**
      * Wait for an element to be clickable (visible and enabled)
      * @param element - WebElement to wait for
      * @return The clickable WebElement
      */
     public WebElement waitForElementToBeClickable(WebElement element) {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    /**
+     * Wait for an element located by a By locator to be clickable (handles elements not yet in DOM)
+     * @param locator - By locator
+     * @return The clickable WebElement
+     */
+    public WebElement waitForElementToBeClickable(By locator) {
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
     /**

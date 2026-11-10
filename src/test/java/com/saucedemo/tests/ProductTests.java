@@ -30,11 +30,8 @@ public class ProductTests extends BaseTest {
      * BeforeMethod - Common setup for product tests
      * Logs in user before each product test
      */
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void beforeProductTest() {
-        // Call parent beforeMethod for driver initialization
-        super.beforeMethod();
-
         // Login before product tests
         LoginPage loginPage = new LoginPage(driver);
         productsPage = loginPage.login(

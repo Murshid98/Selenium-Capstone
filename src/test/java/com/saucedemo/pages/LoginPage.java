@@ -67,9 +67,8 @@ public class LoginPage {
      * @param username - Username to enter
      */
     public void enterUsername(String username) {
-        WebElement usernameInput = driver.findElement(usernameField);
-        waitUtility.waitForElementToBeVisible(usernameInput);
-        usernameInput.clear(); // Clear any existing text
+        WebElement usernameInput = waitUtility.waitForElementToBeVisible(usernameField);
+        usernameInput.clear();
         usernameInput.sendKeys(username);
     }
 
@@ -78,9 +77,8 @@ public class LoginPage {
      * @param password - Password to enter
      */
     public void enterPassword(String password) {
-        WebElement passwordInput = driver.findElement(passwordField);
-        waitUtility.waitForElementToBeVisible(passwordInput);
-        passwordInput.clear(); // Clear any existing text
+        WebElement passwordInput = waitUtility.waitForElementToBeVisible(passwordField);
+        passwordInput.clear();
         passwordInput.sendKeys(password);
     }
 
@@ -90,8 +88,7 @@ public class LoginPage {
      * @return ProductListingPage instance
      */
     public ProductListingPage clickLoginButton() {
-        WebElement loginBtn = driver.findElement(loginButton);
-        waitUtility.waitForElementToBeClickable(loginBtn);
+        WebElement loginBtn = waitUtility.waitForElementToBeClickable(loginButton);
         loginBtn.click();
 
         dismissPasswordPopup();

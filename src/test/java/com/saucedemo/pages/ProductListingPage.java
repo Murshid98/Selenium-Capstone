@@ -4,7 +4,10 @@ import com.saucedemo.utilities.WaitUtility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -225,6 +228,9 @@ public class ProductListingPage {
             WebElement closeBtn = driver.findElement(menuCloseButton);
             waitUtility.waitForElementToBeClickable(closeBtn);
             closeBtn.click();
+            // Wait for the menu overlay to fully disappear before returning
+            new WebDriverWait(driver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.invisibilityOfElementLocated(sidebar));
         } catch (Exception e) {
             // Menu might already be closed
         }

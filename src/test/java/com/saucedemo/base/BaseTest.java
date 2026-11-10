@@ -44,7 +44,7 @@ public class BaseTest {
      * BeforeSuite - Executes once before all tests in the suite
      * Initializes Extent Reports for the entire test run
      */
-    @BeforeSuite
+    @BeforeSuite(alwaysRun = true)
     public void beforeSuite() {
         System.out.println("========== Test Suite Started ==========");
         extentReports = ExtentReportsUtility.initializeExtentReports();
@@ -54,7 +54,7 @@ public class BaseTest {
      * BeforeMethod - Executes before each individual test
      * Initializes WebDriver, navigates to base URL, and creates test report entry
      */
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void beforeMethod() {
         // Initialize WebDriver based on browser type from config
         initializeDriver();
@@ -74,7 +74,7 @@ public class BaseTest {
      *
      * @param result - ITestResult object containing test execution results
      */
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void afterMethod(ITestResult result) {
         // Check if test failed
         if (result.getStatus() == ITestResult.FAILURE) {
@@ -126,7 +126,7 @@ public class BaseTest {
      * AfterSuite - Executes once after all tests in the suite
      * Finalizes Extent Reports generation
      */
-    @AfterSuite
+    @AfterSuite(alwaysRun = true)
     public void afterSuite() {
         // Flush reports to generate final HTML report
         ExtentReportsUtility.flushExtentReports();
