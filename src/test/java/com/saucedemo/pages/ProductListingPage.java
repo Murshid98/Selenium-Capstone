@@ -4,6 +4,8 @@ import com.saucedemo.utilities.WaitUtility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,147 +14,101 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * ProductListingPage - Page Object Model (POM) class for the Products Listing page
- *
- * This class encapsulates all UI elements and interactions on the products inventory page.
- * Handles product display, filtering, sorting, and navigation operations.
+ * ProductListingPage - Page Factory model for the Products Listing page
  *
  * Page URL: https://www.saucedemo.com/inventory.html
  */
 public class ProductListingPage {
 
-    // WebDriver instance
     private WebDriver driver;
-
-    // WaitUtility for explicit waits
     private WaitUtility waitUtility;
 
-    // ===== LOCATORS - All UI element locators for this page =====
+    // ===== PAGE FACTORY ELEMENTS =====
 
-    // Product container locator (parent div containing all products)
-    private By productContainer = By.className("inventory_list");
+    @FindBy(className = "inventory_list")
+    private WebElement productContainer;
 
-    // Individual product item locators
-    private By productItems = By.className("inventory_item");
+    @FindBy(className = "inventory_item")
+    private List<WebElement> productItems;
 
-    // Product name locator (relative to each product item)
-    private By productName = By.className("inventory_item_name");
+    @FindBy(className = "product_sort_container")
+    private WebElement sortDropdown;
 
-    // Product price locator (relative to each product item)
-    private By productPrice = By.className("inventory_item_price");
+    @FindBy(className = "shopping_cart_badge")
+    private WebElement cartBadge;
 
-    // Add to cart button (relative to each product item)
-    private By addToCartButton = By.xpath(".//button[contains(text(), 'Add to cart')]");
+    @FindBy(className = "shopping_cart_link")
+    private WebElement cartIcon;
 
-    // Sort dropdown locator
-    private By sortDropdown = By.className("product_sort_container");
+    @FindBy(id = "react-burger-menu-btn")
+    private WebElement menuButton;
 
-    // Cart badge showing number of items in cart
-    private By cartBadge = By.className("shopping_cart_badge");
+    @FindBy(className = "bm-menu")
+    private WebElement sidebar;
 
-    // Cart icon/link
-    private By cartIcon = By.className("shopping_cart_link");
+    @FindBy(id = "inventory_sidebar_link")
+    private WebElement allItemsLink;
 
-    // Menu button to open sidebar
-    private By menuButton = By.id("react-burger-menu-btn");
+    @FindBy(id = "about_sidebar_link")
+    private WebElement aboutLink;
 
-    // Sidebar menu
-    private By sidebar = By.className("bm-menu");
+    @FindBy(id = "logout_sidebar_link")
+    private WebElement logoutLink;
 
-    // All Items link in sidebar
-    private By allItemsLink = By.id("inventory_sidebar_link");
+    @FindBy(id = "reset_sidebar_link")
+    private WebElement resetAppStateLink;
 
-    // About link in sidebar
-    private By aboutLink = By.id("about_sidebar_link");
+    @FindBy(id = "react-burger-cross-btn")
+    private WebElement menuCloseButton;
 
-    // Logout link in sidebar
-    private By logoutLink = By.id("logout_sidebar_link");
+    // These selectors are used relative to individual product elements, not page-level.
+    private static final By PRODUCT_NAME_SELECTOR    = By.className("inventory_item_name");
+    private static final By PRODUCT_PRICE_SELECTOR   = By.className("inventory_item_price");
+    private static final By ADD_TO_CART_SELECTOR     = By.xpath(".//button[contains(text(), 'Add to cart')]");
 
-    // Reset App State link in sidebar
-    private By resetAppStateLink = By.id("reset_sidebar_link");
-
-    // Menu close button
-    private By menuCloseButton = By.id("react-burger-cross-btn");
-
-    /**
-     * Constructor - Initialize ProductListingPage with WebDriver instance
-     * @param driver - WebDriver instance passed from test or page class
-     */
     public ProductListingPage(WebDriver driver) {
         this.driver = driver;
         this.waitUtility = new WaitUtility(driver);
+        PageFactory.initElements(driver, this);
     }
 
-    /**
-     * Verify that products page is loaded by checking for product container
-     * @return true if page is loaded, false otherwise
-     */
     public boolean isProductsPageLoaded() {
         try {
-            WebElement container = driver.findElement(productContainer);
-            return container.isDisplayed();
+            return productContainer.isDisplayed();
         } catch (Exception e) {
             return false;
         }
     }
 
-    /**
-     * Get count of all products displayed on the page
-     * @return Number of products visible
-     */
     public int getProductCount() {
-        List<WebElement> products = driver.findElements(productItems);
-        return products.size();
+        return productItems.size();
     }
 
-    /**
-     * Get list of all product names currently displayed
-     * @return List of product name strings
-     */
     public List<String> getProductNames() {
-        List<WebElement> products = driver.findElements(productItems);
-        return products.stream()
-                .map(product -> product.findElement(productName).getText())
+        return productItems.stream()
+                .map(product -> product.findElement(PRODUCT_NAME_SELECTOR).getText())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get list of all product prices currently displayed
-     * @return List of product price strings
-     */
     public List<String> getProductPrices() {
-        List<WebElement> products = driver.findElements(productItems);
-        return products.stream()
-                .map(product -> product.findElement(productPrice).getText())
+        return productItems.stream()
+                .map(product -> product.findElement(PRODUCT_PRICE_SELECTOR).getText())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Sort products by a specific option from dropdown
-     * Available options: "Name (A to Z)", "Name (Z to A)", "Price (low to high)", "Price (high to low)"
-     * @param sortOption - The sorting option to select
-     */
     public void sortProducts(String sortOption) {
-        WebElement dropdown = driver.findElement(sortDropdown);
-        Select select = new Select(dropdown);
+        Select select = new Select(sortDropdown);
         select.selectByVisibleText(sortOption);
-        // Wait a moment for sorting to complete
         try {
-            Thread.sleep(500); // Brief pause to allow sorting animation
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
 
-    /**
-     * Click on a product to navigate to its detail page
-     * @param productName - Name of the product to click
-     * @return ProductDetailPage instance
-     */
     public ProductDetailPage clickOnProduct(String productName) {
-        List<WebElement> products = driver.findElements(productItems);
-        for (WebElement product : products) {
-            WebElement name = product.findElement(this.productName);
+        for (WebElement product : productItems) {
+            WebElement name = product.findElement(PRODUCT_NAME_SELECTOR);
             if (name.getText().equals(productName)) {
                 waitUtility.waitForElementToBeClickable(name);
                 name.click();
@@ -162,16 +118,11 @@ public class ProductListingPage {
         throw new IllegalArgumentException("Product not found: " + productName);
     }
 
-    /**
-     * Add a product to cart by product name
-     * @param productName - Name of the product to add to cart
-     */
     public void addProductToCart(String productName) {
-        List<WebElement> products = driver.findElements(productItems);
-        for (WebElement product : products) {
-            WebElement name = product.findElement(this.productName);
+        for (WebElement product : productItems) {
+            WebElement name = product.findElement(PRODUCT_NAME_SELECTOR);
             if (name.getText().equals(productName)) {
-                WebElement addButton = product.findElement(addToCartButton);
+                WebElement addButton = product.findElement(ADD_TO_CART_SELECTOR);
                 waitUtility.waitForElementToBeClickable(addButton);
                 addButton.click();
                 return;
@@ -180,39 +131,23 @@ public class ProductListingPage {
         throw new IllegalArgumentException("Product not found: " + productName);
     }
 
-    /**
-     * Get the current cart item count from the badge
-     * @return Number of items in cart, or 0 if badge is not displayed
-     */
     public int getCartItemCount() {
         try {
-            WebElement badge = driver.findElement(cartBadge);
-            String countText = badge.getText();
-            return Integer.parseInt(countText);
+            return Integer.parseInt(cartBadge.getText());
         } catch (Exception e) {
-            // Badge not present means 0 items
             return 0;
         }
     }
 
-    /**
-     * Click on the cart icon to navigate to shopping cart
-     * @return ShoppingCartPage instance
-     */
     public ShoppingCartPage clickOnCart() {
-        WebElement cart = waitUtility.waitForElementToBeClickable(driver.findElement(cartIcon));
-        cart.click();
+        waitUtility.waitForElementToBeClickable(cartIcon);
+        cartIcon.click();
         return new ShoppingCartPage(driver);
     }
 
-    /**
-     * Open the sidebar menu
-     */
     public void openMenu() {
-        WebElement menu = driver.findElement(menuButton);
-        waitUtility.waitForElementToBeClickable(menu);
-        menu.click();
-        // Wait for menu to appear
+        waitUtility.waitForElementToBeClickable(menuButton);
+        menuButton.click();
         try {
             Thread.sleep(300);
         } catch (InterruptedException e) {
@@ -220,78 +155,45 @@ public class ProductListingPage {
         }
     }
 
-    /**
-     * Close the sidebar menu
-     */
     public void closeMenu() {
         try {
-            WebElement closeBtn = driver.findElement(menuCloseButton);
-            waitUtility.waitForElementToBeClickable(closeBtn);
-            closeBtn.click();
-            // Wait for the menu overlay to fully disappear before returning
+            waitUtility.waitForElementToBeClickable(menuCloseButton);
+            menuCloseButton.click();
             new WebDriverWait(driver, Duration.ofSeconds(3))
-                    .until(ExpectedConditions.invisibilityOfElementLocated(sidebar));
+                    .until(ExpectedConditions.invisibilityOf(sidebar));
         } catch (Exception e) {
             // Menu might already be closed
         }
     }
 
-    /**
-     * Click on "All Items" link in sidebar menu
-     * Remains on same page (navigates to inventory.html if not already there)
-     */
     public void clickAllItemsLink() {
         openMenu();
-        WebElement allItems = driver.findElement(allItemsLink);
-        waitUtility.waitForElementToBeClickable(allItems);
-        allItems.click();
+        waitUtility.waitForElementToBeClickable(allItemsLink);
+        allItemsLink.click();
         closeMenu();
     }
 
-    /**
-     * Click on "About" link in sidebar menu
-     * Navigates away from the application
-     * @return This page object (browser would navigate away)
-     */
     public void clickAboutLink() {
         openMenu();
-        WebElement about = driver.findElement(aboutLink);
-        waitUtility.waitForElementToBeClickable(about);
-        about.click();
+        waitUtility.waitForElementToBeClickable(aboutLink);
+        aboutLink.click();
     }
 
-    /**
-     * Click on "Logout" link in sidebar menu
-     * Navigates back to login page
-     * @return LoginPage instance
-     */
     public LoginPage clickLogoutLink() {
         openMenu();
-        WebElement logout = driver.findElement(logoutLink);
-        waitUtility.waitForElementToBeClickable(logout);
-        logout.click();
+        waitUtility.waitForElementToBeClickable(logoutLink);
+        logoutLink.click();
         return new LoginPage(driver);
     }
 
-    /**
-     * Click on "Reset App State" link in sidebar menu
-     * Resets cart and any applied filters
-     */
     public void clickResetAppStateLink() {
         openMenu();
-        WebElement resetAppState = driver.findElement(resetAppStateLink);
-        waitUtility.waitForElementToBeClickable(resetAppState);
-        resetAppState.click();
+        waitUtility.waitForElementToBeClickable(resetAppStateLink);
+        resetAppStateLink.click();
         closeMenu();
     }
 
-    /**
-     * Check if a product is in the list by name
-     * @param productName - Name of product to search for
-     * @return true if product found, false otherwise
-     */
     public boolean isProductInList(String productName) {
-        List<String> productNames = getProductNames();
-        return productNames.contains(productName);
+        return getProductNames().contains(productName);
     }
 }

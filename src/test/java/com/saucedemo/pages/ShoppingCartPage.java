@@ -4,151 +4,107 @@ import com.saucedemo.utilities.WaitUtility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * ShoppingCartPage - Page Object Model (POM) class for Shopping Cart page
- *
- * This class encapsulates all UI elements and interactions on the shopping cart page.
- * Handles cart item display, removal, and navigation to checkout.
+ * ShoppingCartPage - Page Factory model for the Shopping Cart page
  *
  * Page URL: https://www.saucedemo.com/cart.html
  */
 public class ShoppingCartPage {
 
-    // WebDriver instance
     private WebDriver driver;
-
-    // WaitUtility for explicit waits
     private WaitUtility waitUtility;
 
-    // ===== LOCATORS - All UI element locators for this page =====
+    // ===== PAGE FACTORY ELEMENTS =====
 
-    // Cart container holding all cart items
-    private By cartContainer = By.className("cart_list");
+    @FindBy(className = "cart_list")
+    private WebElement cartContainer;
 
-    // Individual cart item elements
-    private By cartItems = By.className("cart_item");
+    @FindBy(className = "cart_item")
+    private List<WebElement> cartItems;
 
-    // Item name within cart item
-    private By itemName = By.className("inventory_item_name");
+    @FindBy(id = "continue-shopping")
+    private WebElement continueShoppingButton;
 
-    // Item quantity within cart item
-    private By itemQuantity = By.className("cart_quantity");
+    @FindBy(xpath = "//button[contains(text(), 'Checkout')]")
+    private WebElement checkoutButton;
 
-    // Item price within cart item
-    private By itemPrice = By.className("inventory_item_price");
+    @FindBy(className = "title")
+    private WebElement cartPageTitle;
 
-    // Remove button for each cart item
-    private By removeButton = By.xpath(".//button[contains(text(), 'Remove')]");
+    // Relative selectors used within individual cart item elements
+    private static final By ITEM_NAME_SELECTOR     = By.className("inventory_item_name");
+    private static final By ITEM_QUANTITY_SELECTOR = By.className("cart_quantity");
+    private static final By ITEM_PRICE_SELECTOR    = By.className("inventory_item_price");
+    private static final By REMOVE_BUTTON_SELECTOR = By.xpath(".//button[contains(text(), 'Remove')]");
 
-    // Continue Shopping button
-    private By continueShoppingButton = By.id("continue-shopping");
-
-    // Checkout button - using xpath for reliability as button text is "Checkout"
-    private By checkoutButton = By.xpath("//button[contains(text(), 'Checkout')]");
-
-    // Page title/header
-    private By cartPageTitle = By.className("title");
-
-    /**
-     * Constructor - Initialize ShoppingCartPage with WebDriver instance
-     * @param driver - WebDriver instance
-     */
     public ShoppingCartPage(WebDriver driver) {
         this.driver = driver;
         this.waitUtility = new WaitUtility(driver);
+        PageFactory.initElements(driver, this);
     }
 
-    /**
-     * Verify that cart page is loaded by checking for cart container
-     * @return true if page is loaded, false otherwise
-     */
     public boolean isCartPageLoaded() {
         try {
-            WebElement container = waitUtility.waitForElementToBeVisible(driver.findElement(cartContainer));
-            return container != null && container.isDisplayed();
+            waitUtility.waitForElementToBeVisible(cartContainer);
+            return cartContainer.isDisplayed();
         } catch (Exception e) {
             return false;
         }
     }
 
-    /**
-     * Get count of items currently in the cart
-     * @return Number of items in cart
-     */
     public int getCartItemCount() {
         try {
-            waitUtility.waitForElementToBeVisible(driver.findElement(cartContainer));
+            waitUtility.waitForElementToBeVisible(cartContainer);
         } catch (Exception e) {
             // Container might not exist if cart is empty
         }
-        List<WebElement> items = driver.findElements(cartItems);
-        return items.size();
+        return cartItems.size();
     }
 
-    /**
-     * Get list of all item names in the cart
-     * @return List of item name strings
-     */
     public List<String> getCartItemNames() {
         try {
-            waitUtility.waitForElementToBeVisible(driver.findElement(cartContainer));
+            waitUtility.waitForElementToBeVisible(cartContainer);
         } catch (Exception e) {
-            // Container might not exist if cart is empty, return empty list
-            return java.util.Collections.emptyList();
+            return Collections.emptyList();
         }
-        List<WebElement> items = driver.findElements(cartItems);
-        return items.stream()
-                .map(item -> item.findElement(itemName).getText())
+        return cartItems.stream()
+                .map(item -> item.findElement(ITEM_NAME_SELECTOR).getText())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get list of all item prices in the cart
-     * @return List of item price strings
-     */
     public List<String> getCartItemPrices() {
         try {
-            waitUtility.waitForElementToBeVisible(driver.findElement(cartContainer));
+            waitUtility.waitForElementToBeVisible(cartContainer);
         } catch (Exception e) {
-            // Container might not exist if cart is empty, return empty list
-            return java.util.Collections.emptyList();
+            return Collections.emptyList();
         }
-        List<WebElement> items = driver.findElements(cartItems);
-        return items.stream()
-                .map(item -> item.findElement(itemPrice).getText())
+        return cartItems.stream()
+                .map(item -> item.findElement(ITEM_PRICE_SELECTOR).getText())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get list of all item quantities in the cart
-     * @return List of quantity values
-     */
     public List<String> getCartItemQuantities() {
         try {
-            waitUtility.waitForElementToBeVisible(driver.findElement(cartContainer));
+            waitUtility.waitForElementToBeVisible(cartContainer);
         } catch (Exception e) {
-            // Container might not exist if cart is empty, return empty list
-            return java.util.Collections.emptyList();
+            return Collections.emptyList();
         }
-        List<WebElement> items = driver.findElements(cartItems);
-        return items.stream()
-                .map(item -> item.findElement(itemQuantity).getText())
+        return cartItems.stream()
+                .map(item -> item.findElement(ITEM_QUANTITY_SELECTOR).getText())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Remove a specific item from cart by its name
-     * @param itemName - Name of the item to remove
-     */
     public void removeItemFromCart(String itemName) {
-        List<WebElement> items = driver.findElements(cartItems);
-        for (WebElement item : items) {
-            WebElement name = item.findElement(this.itemName);
+        for (WebElement item : cartItems) {
+            WebElement name = item.findElement(ITEM_NAME_SELECTOR);
             if (name.getText().equals(itemName)) {
-                WebElement removeBtn = item.findElement(removeButton);
+                WebElement removeBtn = item.findElement(REMOVE_BUTTON_SELECTOR);
                 waitUtility.waitForElementToBeClickable(removeBtn);
                 removeBtn.click();
                 return;
@@ -157,63 +113,38 @@ public class ShoppingCartPage {
         throw new IllegalArgumentException("Item not found in cart: " + itemName);
     }
 
-    /**
-     * Check if a specific item is in the cart
-     * @param itemName - Name of item to search for
-     * @return true if item found in cart, false otherwise
-     */
     public boolean isItemInCart(String itemName) {
-        List<String> cartItemNames = getCartItemNames();
-        return cartItemNames.contains(itemName);
+        return getCartItemNames().contains(itemName);
     }
 
-    /**
-     * Get details of a specific item in the cart
-     * @param itemName - Name of the item
-     * @return Array containing [name, quantity, price]
-     */
     public String[] getItemDetails(String itemName) {
-        List<WebElement> items = driver.findElements(cartItems);
-        for (WebElement item : items) {
-            WebElement name = item.findElement(this.itemName);
+        for (WebElement item : cartItems) {
+            WebElement name = item.findElement(ITEM_NAME_SELECTOR);
             if (name.getText().equals(itemName)) {
-                String quantity = item.findElement(itemQuantity).getText();
-                String price = item.findElement(itemPrice).getText();
+                String quantity = item.findElement(ITEM_QUANTITY_SELECTOR).getText();
+                String price    = item.findElement(ITEM_PRICE_SELECTOR).getText();
                 return new String[]{itemName, quantity, price};
             }
         }
         throw new IllegalArgumentException("Item not found in cart: " + itemName);
     }
 
-    /**
-     * Click "Continue Shopping" button to return to products page
-     * @return ProductListingPage instance
-     */
     public ProductListingPage clickContinueShopping() {
-        WebElement continueBtn = driver.findElement(continueShoppingButton);
-        waitUtility.waitForElementToBeClickable(continueBtn);
-        continueBtn.click();
+        waitUtility.waitForElementToBeClickable(continueShoppingButton);
+        continueShoppingButton.click();
         return new ProductListingPage(driver);
     }
 
-    /**
-     * Click "Checkout" button to proceed to checkout page
-     * @return CheckoutPage instance
-     */
     public CheckoutPage clickCheckout() {
         try {
-            WebElement checkoutBtn = waitUtility.waitForElementToBeClickable(driver.findElement(checkoutButton));
-            checkoutBtn.click();
+            waitUtility.waitForElementToBeClickable(checkoutButton);
+            checkoutButton.click();
         } catch (Exception e) {
             throw new RuntimeException("Checkout button not found or not clickable. Ensure items are in cart.");
         }
         return new CheckoutPage(driver);
     }
 
-    /**
-     * Verify cart is empty (no items displayed)
-     * @return true if cart is empty, false if items present
-     */
     public boolean isCartEmpty() {
         return getCartItemCount() == 0;
     }
