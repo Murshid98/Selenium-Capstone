@@ -51,7 +51,7 @@ public class ProductTests extends BaseTest {
     public void testProductCount() {
         // Create report entry
         createTestReport("Product Count Verification",
-                "Verify correct number of products displayed on listing page");
+                "Verify correct number of products displayed on listin g  page");
 
         // Assert products page is loaded
         Assert.assertTrue(productsPage.isProductsPageLoaded(),

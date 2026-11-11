@@ -9,9 +9,11 @@ import org.testng.annotations.Test;
 
 public class TestWorkFlow extends BaseTest {
 
+    //comment
+
     @Test
     public void testLoginAndClose() {
-        createTestReport("Workflow Test - Login and Close!",
+        createTestReport("Workflow Test - Login and Close - changes made",
                 "Verify login works and browser closes cleanly");
 
         LoginPage loginPage = new LoginPage(driver);
