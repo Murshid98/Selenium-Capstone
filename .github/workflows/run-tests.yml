@@ -1,0 +1,55 @@
+name: Run Tests on New Test Class
+
+# Trigger: runs whenever a file inside the tests folder is pushed to GitHub
+on:
+  push:
+    paths:
+      - 'src/test/java/com/saucedemo/tests/**'
+
+jobs:
+  selenium-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Pull the latest code from the repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Install Java 17 (matches pom.xml compiler version)
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3. Cache Maven dependencies so subsequent runs are faster
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # 4. Run the full test suite
+      #    -Dheadless.mode=true  → forces Chrome headless (no display on Linux CI)
+      #    --no-transfer-progress → cleaner logs
+      - name: Run all tests
+        run: mvn test -Dheadless.mode=true --no-transfer-progress
+
+      # 5. Always upload the Extent Report HTML (even when tests fail)
+      - name: Upload Extent Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: test-results/reports/
+
+      # 6. Upload screenshots only when there are failures
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshots
+          path: test-results/screenshots/

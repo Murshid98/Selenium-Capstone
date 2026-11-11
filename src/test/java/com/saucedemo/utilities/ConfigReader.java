@@ -139,7 +139,11 @@ public class ConfigReader {
      * @return true if headless mode enabled, false for headed mode
      */
     public static boolean isHeadlessMode() {
-        String headless = getProperty("headless.mode");
-        return Boolean.parseBoolean(headless);
+        // Maven -Dheadless.mode=true (used in CI) takes priority over config.properties
+        String sysProp = System.getProperty("headless.mode");
+        if (sysProp != null) {
+            return Boolean.parseBoolean(sysProp);
+        }
+        return Boolean.parseBoolean(getProperty("headless.mode"));
     }
 }

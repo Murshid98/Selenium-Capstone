@@ -79,14 +79,16 @@ public class BaseTest {
         // Check if test failed
         if (result.getStatus() == ITestResult.FAILURE) {
             // Capture screenshot on failure
-            String screenshotPath = ScreenshotUtility.captureScreenshot(driver, result.getName());
+            ScreenshotUtility.captureScreenshot(driver, result.getName());
 
-            // Log failure details
+            // Log failure details and embed screenshot directly in the HTML report
             if (test != null) {
                 test.fail("Test Failed: " + result.getThrowable().getMessage());
-                if (screenshotPath != null) {
-                    // Add screenshot to report
-                    test.addScreenCaptureFromPath(screenshotPath);
+                try {
+                    String base64Screenshot = ScreenshotUtility.getScreenshotAsBase64(driver);
+                    test.addScreenCaptureFromBase64String(base64Screenshot, result.getName());
+                } catch (Exception e) {
+                    System.out.println("Could not attach screenshot to report: " + e.getMessage());
                 }
             }
             System.out.println("TEST FAILED: " + result.getName());
