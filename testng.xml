@@ -98,6 +98,13 @@
         </classes>
     </test>
 
+    <!-- ===== WORKFLOW TEST ===== -->
+    <test name="Workflow Test" enabled="true">
+        <classes>
+            <class name="com.saucedemo.tests.TestWorkFlow" />
+        </classes>
+    </test>
+
     <!-- ===== TEST GROUP 2: NEGATIVE TESTS (Error Handling) ===== -->
     <!-- These tests verify that the application handles errors and invalid inputs correctly -->
     <test name="Negative Tests" enabled="true">
