@@ -11,7 +11,7 @@ public class TestWorkFlow extends BaseTest {
 
     @Test
     public void testLoginAndClose() {
-        createTestReport("Workflow Test - Login and Close",
+        createTestReport("Workflow Test - Login and Close!",
                 "Verify login works and browser closes cleanly");
 
         LoginPage loginPage = new LoginPage(driver);
